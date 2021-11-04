@@ -93,6 +93,18 @@ namespace Kirurobo
         private bool _isTransparent = false;
 
         /// <summary>
+        /// Is this window content protected
+        /// </summary>
+        public bool isProtected
+        {
+        
+            get { Debug.Log("isProtected value is:"+_isContentProtoceted); return _isContentProtoceted; }
+            set { Debug.Log("setting content protection to:" + value); SetContentProtected(value); }
+        }
+        [SerializeField, BoolProperty, Tooltip("Check to content protection on startup")]
+        private bool _isContentProtoceted = false;
+
+        /// <summary>
         /// Is this window topmost
         /// </summary>
         public bool isTopmost
@@ -752,6 +764,15 @@ namespace Kirurobo
             }
 #endif
             UpdateClickThrough();
+        }
+
+        private void SetContentProtected(bool _protected)
+        {
+            Debug.LogError("setcontentprotected function was called with value:" + _protected);
+            if (uniWinCore != null)
+            {
+                uniWinCore.SetContentProtection(_protected);
+            }
         }
 
         /// <summary>
