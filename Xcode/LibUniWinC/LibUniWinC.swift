@@ -31,6 +31,7 @@ public class LibUniWinC : NSObject {
         public var isBottommost: Bool = false
         public var isBorderless: Bool = false
         public var isTransparent: Bool = false
+        public var isProtected: Bool = false;
         
         // サイズ変更がなされると不正確となる。透過時にこれを使う
         public var isZoomed: Bool = false
@@ -94,6 +95,7 @@ public class LibUniWinC : NSObject {
         public var contentViewWantsLayer: Bool = true
         public var contentViewLayerIsOpaque: Bool = true
         public var contentViewLayerBackgroundColor: CGColor? = CGColor.clear
+        private var contentProtection = NSWindow.SharingType.readWrite;
 
         
         /// 指定ウィンドウの初期値を記憶
@@ -127,6 +129,7 @@ public class LibUniWinC : NSObject {
             window.backgroundColor = self.backgroundColor
             window.isOpaque = self.isOpaque
             window.hasShadow = self.hasShadow
+            window.sharingType = self.contentProtection;
             
             window.contentView?.wantsLayer = self.contentViewWantsLayer
             window.contentView?.layer?.isOpaque = self.contentViewLayerIsOpaque
@@ -182,9 +185,14 @@ public class LibUniWinC : NSObject {
         return state.isTransparent
     }
     
+    @objc public static func isContentProtected() -> Bool {
+        return state.isProtected;
+    }
+    
     @objc public static func isBorderless() -> Bool {
         return state.isBorderless
     }
+    
     
     @objc public static func isTopmost() -> Bool {
         return state.isTopmost
@@ -555,6 +563,19 @@ public class LibUniWinC : NSObject {
     /// 現在はWindowsでのみ実装
     /// - Parameter type: 0:None, 1:Alpha, 2:ColorKey
     @objc public static func setTransparentType(type: Int32) -> Void {
+    }
+    
+    /// - Parameter isProtected: false  readwrite, true:None
+    @objc public static func setContentProtection(isProtected: Bool) -> Void {
+        state.isProtected = isProtected;
+        if let window: NSWindow = targetWindow {
+            if(isProtected) {
+                window.sharingType = NSWindow.SharingType.none;
+            } else {
+                window.sharingType = NSWindow.SharingType.readWrite;
+
+            }
+        }
     }
     
     /// 単色マスクの場合の色設定

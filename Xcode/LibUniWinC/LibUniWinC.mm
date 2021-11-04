@@ -158,6 +158,10 @@ UNIWINC_EXPORT void SetTransparentType(SInt32 type) {
     [LibUniWinC setTransparentTypeWithType: type];
 }
 
+UNIWINC_EXPORT void SetContentProtection(BOOL type) {
+    [LibUniWinC setContentProtectionWithIsProtected:type];
+}
+
 UNIWINC_EXPORT void SetKeyColor(SInt32 color) {
     [LibUniWinC setKeyColorWithColor: color];
 }
